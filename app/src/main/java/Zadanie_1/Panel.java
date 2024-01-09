@@ -14,7 +14,7 @@ public class Panel extends JPanel {
     }
     public Color newColor(){
         Random rand = new Random();
-        //Zmiana koloru na losowy
+        //Get new random Color
         float red = rand.nextFloat();
         float green = rand.nextFloat();
         float blue = rand.nextFloat();
@@ -24,36 +24,41 @@ public class Panel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        //Kolo
+        //Draw circle
         g.drawOval(10, 10, 380, 380);
-        //Sumowanie tablicy
+        //Sum every number in the array
         int sum = 0;
         for(int i=0;i<size;i++){
             sum = sum+list[i];
         }
-        //Rysowanie całości
+        //Draw everything
         int startAngle = 0;
         int currAngle = 0;
         for(int i=0;i<size;i++){
-            //Luki 
-            //x,y,w,h luku == x,y,w,h kola
-            //startAngle[i] = startAngle[i-1] + arcAngle[i-1]
+            //Redraw previously drawn angles 
             double Angle=0;
+            //Get Color from colorWheel
             g.setColor(colorWheel.get(i));
+            //Angle is percentage of the wheel
             Angle = ((double)list[i]/sum)*360;
             currAngle = (int)Angle;
+            //x,y,w,h angle == x,y,w,h circle
             g.fillArc(10,10,380,380,startAngle,currAngle);
+            //When curren angle stop next one will start
             startAngle = startAngle+currAngle;
         }
+
         colorWheel.add(newColor());
+        //Draw new Angle
+        //Get Color from colorWheel
         g.setColor(colorWheel.get(size));
+        //currAngle is set to leftover part of the wheel 
         currAngle = 360 - startAngle;
         g.fillArc(10,10,380,380,startAngle,currAngle);
 
-        
-        
     }
     public void setList(Integer[] list,int size){
+        //Set list of Integers and its size
         this.list = list;
         this.size = size;
     }

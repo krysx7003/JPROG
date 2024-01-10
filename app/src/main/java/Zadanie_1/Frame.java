@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Frame extends JFrame implements ActionListener{
+public class Frame extends JFrame {
 
     JButton butD = new JButton("DODAJ");
     JButton butU = new JButton("USUN");
@@ -23,16 +23,14 @@ public class Frame extends JFrame implements ActionListener{
         //adds new number to scroll pane
         dataModel.add(size,newInt);
         size++;
-        intJList =new JList<>(dataModel);
-        scrollPane =new JScrollPane(intJList);
+        intJList.setModel(dataModel);
         //Redraws scroll pane
         scrollPane.repaint();
     }
     public void changeList(int idToChange,int intToChange){
         //Changes selected number to new one
         dataModel.set(idToChange,intToChange);
-        intJList =new JList<>(dataModel);
-        scrollPane =new JScrollPane(intJList);
+        intJList.setModel(dataModel);
         //Redraws scroll pane
         scrollPane.repaint();
     }
@@ -40,8 +38,7 @@ public class Frame extends JFrame implements ActionListener{
         //Removes selected number from the list
         dataModel.remove(idToRem);
         size--;
-        intJList =new JList<>(dataModel);
-        scrollPane =new JScrollPane(intJList);
+        intJList.setModel(dataModel);
         //Redraws scroll pane
         scrollPane.repaint();
 
@@ -57,9 +54,42 @@ public class Frame extends JFrame implements ActionListener{
     }
     public Frame() {
         super("Zadanie 1");
-        butD.addActionListener(this);
-        butE.addActionListener(this);
-        butU.addActionListener(this);
+        butD.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int newInt = Integer.parseInt(text.getText());
+                addToList(newInt);
+                putDiagram();
+            }
+
+        });
+        butE.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(intJList.isSelectionEmpty()==false){
+                    //Gets index of selected number
+                    int idToChange = intJList.getSelectedIndex();
+                    //Gets a new int from text field
+                    int intToChange = Integer.parseInt(text.getText()); 
+                    changeList(idToChange, intToChange);
+                    putDiagram();
+                }
+            }
+
+        });
+        butU.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(intJList.isSelectionEmpty()==false){
+                    //Gets index of selected number
+                    int idToRem = intJList.getSelectedIndex();
+                    remFromList(idToRem);
+                    putDiagram();
+                }
+            }
+
+        });
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setSize(800,800);
@@ -102,9 +132,8 @@ public class Frame extends JFrame implements ActionListener{
         add(butE,c);
         setVisible(true);
     }
-
-
-    @Override
+    /*
+     @Override
  		public void actionPerformed(ActionEvent e) {
             Object source = e.getSource();
  			if(source == butD){
@@ -130,4 +159,7 @@ public class Frame extends JFrame implements ActionListener{
                 }
             }
  		}
+     */
+
+    
 }

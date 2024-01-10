@@ -67,8 +67,10 @@ public class Frame extends JFrame {
                     addToList(newInt);
                     //Repaint graph
                     putDiagram();
-                    //Clear error message from output text
-                    outText.setText("");
+                    //Display succes message in bold green letters
+                    outText.setText("Wykres zostal przerysowany");
+                    outText.setFont(font);
+                    outText.setForeground(Color.GREEN);
                 } catch (Exception x) {
                     if(text.getText().equals(null)){
                         //Display error message in bold red letters
@@ -100,8 +102,10 @@ public class Frame extends JFrame {
                         changeList(idToChange, intToChange);
                         //Repaint graph
                         putDiagram();
-                        //Clear error message from output text
-                        outText.setText("");
+                        //Display error message in bold red letters
+                        outText.setText("Wykres zostal przerysowany");
+                        outText.setFont(font);
+                        outText.setForeground(Color.RED);
                     } catch (Exception x) {
                         if(text.getText().equals(null)){
                             //Display error message in bold red letters
@@ -135,8 +139,10 @@ public class Frame extends JFrame {
                     remFromList(idToRem);
                     //Repaint graph
                     putDiagram();
-                    //Clear error message from output text
-                    outText.setText("");
+                    //Display error message in bold red letters
+                    outText.setText("Wykres zostal przerysowany");
+                    outText.setFont(font);
+                    outText.setForeground(Color.GREEN);
                 }else{
                     //Display error message in bold red letters
                     outText.setText("Nie zaznaczono elemetu w tablicy");

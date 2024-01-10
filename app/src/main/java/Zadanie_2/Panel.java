@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 public class Panel extends JPanel {
     static ArrayList<Color> colorWheel = new ArrayList<>();
     int[][] list;
-
     public Panel() {
         setPreferredSize(new Dimension(400, 200));
         //After initialization get 10 random Colors 
@@ -26,6 +25,7 @@ public class Panel extends JPanel {
         return new Color(red,green,blue);
     }
     public ArrayList<Color> getColors(){
+        //Return whole colorWheel
         return colorWheel;
     }
     public void setList(int[][] listToSet){
@@ -47,7 +47,6 @@ public class Panel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         //Draw simple guide line
-        
         if(!checkIfListEmpty()){
             int newMax = 0;
             int ammountOfBoxes = 0;
@@ -72,13 +71,11 @@ public class Panel extends JPanel {
                     height = height*200;
                     g.fillRect(width*j+20, 200-(int)height, width, (int)height);
                     j++;
-                }
-                
+                }    
             }
         }
-
         g.setColor(Color.BLACK);
-        //Draw simple guide line
+        //Draw simple guide box
         g.drawRect(0, 0, 399, 199);
         
     }

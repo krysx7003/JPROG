@@ -1,13 +1,11 @@
 package Zadanie_1;
-
+//Autor Krzysztof Zalewa
 
 import java.awt.EventQueue;
 
 public class Zad6 {
-
+    
     public static void main(String[] args){
-        System.out.println(Integer.MAX_VALUE);
-        System.out.println(Integer.MIN_VALUE);
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -17,7 +15,7 @@ public class Zad6 {
 
 
     }
-    //DPODAJ
+    //DODAJ
     //dodaje liczbe z pola tekstowego
     //wyliczanie fragmentu wykresu
     //Suma ni a nastepnie ni/suma *360

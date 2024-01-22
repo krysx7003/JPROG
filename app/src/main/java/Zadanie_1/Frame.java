@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Frame extends JFrame implements ActionListener{
+public class Frame extends JFrame {
 
     JButton butD = new JButton("DODAJ");
     JButton butU = new JButton("USUN");
@@ -14,35 +14,33 @@ public class Frame extends JFrame implements ActionListener{
     DefaultListModel<Integer> dataModel = new DefaultListModel<>();
     JList<Integer> intJList =new JList<>(dataModel);
     JScrollPane scrollPane;
-    int idToChange;
     Panel panel = new Panel();
     //size of int[]
     static int size = 0;
     //Adds a new int to scroll pane
     public void addToList(int newInt){
-        //adds new number to scroll pane
-        dataModel.add(size,newInt);
-        size++;
-        intJList =new JList<>(dataModel);
-        scrollPane =new JScrollPane(intJList);
-        //Redraws scroll pane
+        //Add new number to scroll pane
+        dataModel.add(size,newInt);        
+        intJList.setModel(dataModel);
+        //Redraw scroll pane
         scrollPane.repaint();
+        size++;
     }
     public void changeList(int idToChange,int intToChange){
-        //Changes selected number to new one
+        //Change selected number to new one
         dataModel.set(idToChange,intToChange);
-        intJList =new JList<>(dataModel);
-        scrollPane =new JScrollPane(intJList);
-        //Redraws scroll pane
+        intJList.setModel(dataModel);
+        //Redraw scroll pane
         scrollPane.repaint();
     }
     public void remFromList(int idToRem){
-        //Removes selected number from the list
+        //Remove selected number from the list
         dataModel.remove(idToRem);
+        //Remove color coresponding to removed value
+        panel.removeColorAt(idToRem);
         size--;
-        intJList =new JList<>(dataModel);
-        scrollPane =new JScrollPane(intJList);
-        //Redraws scroll pane
+        intJList.setModel(dataModel);
+        //Redraw scroll pane
         scrollPane.repaint();
 
     }
@@ -57,22 +55,127 @@ public class Frame extends JFrame implements ActionListener{
     }
     public Frame() {
         super("Zadanie 1");
-        butD.addActionListener(this);
-        butE.addActionListener(this);
-        butU.addActionListener(this);
+        JTextField outText = new JTextField();
+        Font font = new Font("NazwaCzcionki", Font.BOLD, 12);
+        //Add action listener to button "Dodaj"
+        butD.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    //Gets a new int from text field
+                    int newInt = Integer.parseInt(text.getText());
+                    addToList(newInt);
+                    //Repaint graph
+                    putDiagram();
+                    //Display succes message in bold green letters
+                    outText.setText("Wykres zostal przerysowany");
+                    outText.setFont(font);
+                    outText.setForeground(Color.GREEN);
+                } catch (Exception x) {
+                    if(text.getText().equals(null)){
+                        //Display error message in bold red letters
+                        outText.setText("Podana wartosc nie jest integerem");
+                        outText.setFont(font);
+                        outText.setForeground(Color.RED);
+                    }else{
+                        //Display error message in bold red letters
+                        outText.setText("Pole tekstowe jest puste, nie podano wartosci");
+                        outText.setFont(font);
+                        outText.setForeground(Color.RED);
+                    }
+                    
+                }
+                
+            }
+
+        });
+        //Add action listener to button "Edytuj"
+        butE.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(intJList.isSelectionEmpty()==false){
+                    try {
+                        //Gets a new int from text field
+                        int intToChange = Integer.parseInt(text.getText()); 
+                        //Gets index of selected number
+                        int idToChange = intJList.getSelectedIndex();
+                        changeList(idToChange, intToChange);
+                        //Repaint graph
+                        putDiagram();
+                        //Display error message in bold red letters
+                        outText.setText("Wykres zostal przerysowany");
+                        outText.setFont(font);
+                        outText.setForeground(Color.RED);
+                    } catch (Exception x) {
+                        if(text.getText().equals(null)){
+                            //Display error message in bold red letters
+                            outText.setText("Podana wartosc nie jest integerem");
+                            outText.setFont(font);
+                            outText.setForeground(Color.RED);
+                        }else{
+                            //Display error message in bold red letters
+                            outText.setText("Pole tekstowe jest puste, nie podano wartosci");
+                            outText.setFont(font);
+                            outText.setForeground(Color.RED);
+                        }
+                    }
+                    
+                }else{
+                    //Display error message in bold red letters
+                    outText.setText("Nie zaznaczono elemetu w tablicy");
+                    outText.setFont(font);
+                    outText.setForeground(Color.RED);
+                }
+            }
+
+        });
+        //Add action listener to button "Usun"
+        butU.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(intJList.isSelectionEmpty()==false){
+                    //Gets index of selected number
+                    int idToRem = intJList.getSelectedIndex();
+                    remFromList(idToRem);
+                    //Repaint graph
+                    putDiagram();
+                    //Display error message in bold red letters
+                    outText.setText("Wykres zostal przerysowany");
+                    outText.setFont(font);
+                    outText.setForeground(Color.GREEN);
+                }else{
+                    //Display error message in bold red letters
+                    outText.setText("Nie zaznaczono elemetu w tablicy");
+                    outText.setFont(font);
+                    outText.setForeground(Color.RED);
+                }
+            }
+
+        });
+        //Create new ListCellRenederer
+        ListCellRenderer<? super Integer> customRenderer = new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                //If element is selected its background turns light gray
+                if(isSelected){
+                    renderer.setBackground(Color.LIGHT_GRAY);
+                //Else its background is set to coresponding color from the graph
+                }else{
+                    renderer.setBackground(panel.getColorAt(index));
+                }  
+                
+                return renderer;
+            }
+        };
+        //Add custom renderer to intJList
+        intJList.setCellRenderer(customRenderer);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setSize(800,800);
         setLocation(200,200);
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        //tmp number input
-        /*
-         for(;size<10;){
-            addToList(size*3);
-            //dataModel.add(size,size*3);
-        }
-        */ 
         //Put diagram in to frame
         add(panel);
         //Put scrollable pane in to frame
@@ -100,34 +203,12 @@ public class Frame extends JFrame implements ActionListener{
         c.gridx = 3;
         c.gridy = 2;
         add(butE,c);
+        //Put output text in to frame
+        c.gridx = 0;
+        c.gridy = 1;
+        outText.setEditable(false);
+        add(outText,c);
         setVisible(true);
     }
 
-
-    @Override
- 		public void actionPerformed(ActionEvent e) {
-            Object source = e.getSource();
- 			if(source == butD){
-                //Gets a new int from text field
-                int newInt = Integer.parseInt(text.getText());
-                addToList(newInt);
-                putDiagram();
-            } else if(source == butU){
-                if(intJList.isSelectionEmpty()==false){
-                    //Gets index of selected number
-                    int idToRem = intJList.getSelectedIndex();
-                    remFromList(idToRem);
-                    putDiagram();
-                }
-            } else if(source == butE){
-                if(intJList.isSelectionEmpty()==false){
-                    //Gets index of selected number
-                    int idToChange = intJList.getSelectedIndex();
-                    //Gets a new int from text field
-                    int intToChange = Integer.parseInt(text.getText()); 
-                    changeList(idToChange, intToChange);
-                    putDiagram();
-                }
-            }
- 		}
 }

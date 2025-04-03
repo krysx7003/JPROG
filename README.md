@@ -19,3 +19,10 @@ Proste programy wykożystujące biblioteki swing i awt
 * Piłki mają własny kolor i  prędkość
 * Piłki kręcą się po okręgu
 * Prz "zderzeniu" piłki odpowiednio zwalniają
+
+## Obsługa
+
+1. Aby uruchomić programy należy je skompilować przy pomocy
+    javac {Nazwa pakietu}/*.java
+2. Następnie można je uruchomić przy pomocy
+    java {Nazwa pakietu}/{Nazwa klasy głównej}.java
